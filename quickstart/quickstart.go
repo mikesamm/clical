@@ -32,9 +32,13 @@ func getClient(config *oauth2.Config) *http.Client {
 // Requests a token from the web, then returns the retrieved token
 func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 	authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
-	fmt.Printf("Go to the following link in your browser then type the "+"authorization code:\n%v\n", authURL)
+	fmt.Printf("Go to the following link in your browser then type the "+
+		"authorization code:\n%v\n", authURL)
 
 	var authCode string
+	// Prompt to enter the auth code
+	fmt.Printf("\nEnter authCode here: ")
+
 	if _, err := fmt.Scan(&authCode); err != nil {
 		log.Fatalf("Unable to read authorization code: %v", err)
 	}
@@ -100,11 +104,29 @@ func main() {
 		fmt.Println("No upcoming events found")
 	} else {
 		for _, item := range events.Items {
-			date := item.Start.DateTime
-			if date == "" {
+			var date string
+			startTime := item.Start.DateTime
+			endTime := item.End.DateTime
+			if startTime == "" || endTime == "" {
 				date = item.Start.Date
+				fmt.Printf("%v { Created by: %v on %v. Starts on %v }\n",
+					item.Summary, item.Creator.Email, item.Created, date)
+			} else {
+				startTimeParsed, err := time.Parse(time.RFC3339, startTime)
+				if err != nil {
+					fmt.Printf("Error parsing start time: %v\n", err)
+					continue
+				}
+				endTimeParsed, err := time.Parse(time.RFC3339, endTime)
+				if err != nil {
+					fmt.Printf("Error parsing end time: %v\n", err)
+					continue
+				}
+				fmt.Printf("%v { Created by: %v on %v. Starts at %v, ends at %v }\n",
+					item.Summary, item.Creator.Email, item.Created,
+					startTimeParsed.Format("Mon Jan 2 15:04:05 MST 2006"),
+					endTimeParsed.Format("15:04:05 MST 2006"))
 			}
-			fmt.Printf("%v (%v)\n", item.Summary, date)
 		}
 	}
 
