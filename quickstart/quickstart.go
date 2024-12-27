@@ -75,6 +75,13 @@ func saveToken(path string, token *oauth2.Token) {
 
 func main() {
 	ctx := context.Background()
+
+	// check for required arguments
+	if len(os.Args) <= 1 {
+		log.Fatal("\n\nUsage: clical [command]\n\nCommands:\n\tclockin, ci - clock in to work\n" +
+			"\tclockout, co - clock out of work\n")
+	}
+
 	b, err := os.ReadFile("credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
@@ -96,9 +103,11 @@ func main() {
 	events, err := srv.Events.List("primary").ShowDeleted(false).
 		SingleEvents(true).TimeMin(t).MaxResults(10).OrderBy("startTime").
 		Do()
+	// if error, replace the token.json file, getTokenFromWeb() will be called
 	if err != nil {
 		log.Fatalf("unable to retrieve next ten of the user's events: %v", err)
 	}
+
 	fmt.Println("Upcoming events:")
 	if len(events.Items) == 0 {
 		fmt.Println("No upcoming events found")
