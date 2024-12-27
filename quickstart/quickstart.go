@@ -75,11 +75,21 @@ func saveToken(path string, token *oauth2.Token) {
 
 func main() {
 	ctx := context.Background()
-
+	acceptedCommand := false
+	// check for accepted commands
+	for _, arg := range os.Args {
+		if arg == "clockin" || arg == "ci" {
+			acceptedCommand = true
+		} else if arg == "clockout" || arg == "co" {
+			acceptedCommand = true
+		}
+	}
 	// check for required arguments
 	if len(os.Args) <= 1 {
 		log.Fatal("\n\nUsage: clical [command]\n\nCommands:\n\tclockin, ci - clock in to work\n" +
 			"\tclockout, co - clock out of work\n")
+	} else if !acceptedCommand {
+		log.Fatal("\n\nInvalid command. Accepted commands are: clockin, ci, clockout, co")
 	}
 
 	b, err := os.ReadFile("credentials.json")
