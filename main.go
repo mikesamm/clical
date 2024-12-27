@@ -15,6 +15,12 @@ import (
 	"google.golang.org/api/option"
 )
 
+type gcalEvent struct {
+	start   calendar.EventDateTime
+	end     calendar.EventDateTime
+	summary string
+}
+
 // Retrieve a token, save the token, then return the generated client
 func getClient(config *oauth2.Config) *http.Client {
 	// The file token.json stores the user's access and refresh tokens, and is
@@ -73,6 +79,29 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
+func clockIn() {
+	// events resource: https://developers.google.com/calendar/api/v3/reference/events#resource
+	fmt.Print("Clocking in\n")
+
+	// create a temp file
+	eventStartDetails, err := os.CreateTemp("./.tmp", "newEventStartDetails-*")
+	if err != nil {
+		fmt.Printf("File not created: %v", err)
+	}
+	// write to temp file: start details needed for api call
+	t := time.Now()
+	bw, err := eventStartDetails.WriteString(t.Format(time.RFC3339))
+	if err != nil {
+		log.Fatalf("Unable to write time to temp file: %v", err)
+	}
+	fmt.Printf("%v bytes written to temp file", bw)
+}
+
+func clockOut() {
+	fmt.Print("Clocking out\n")
+	// http request needs to have calendarId parameter
+}
+
 func main() {
 	ctx := context.Background()
 	acceptedCommand := false
@@ -84,6 +113,7 @@ func main() {
 			acceptedCommand = true
 		}
 	}
+
 	// check for required arguments
 	if len(os.Args) <= 1 {
 		log.Fatal("\n\nUsage: clical [command]\n\nCommands:\n\tclockin, ci - clock in to work\n" +
@@ -118,7 +148,13 @@ func main() {
 		log.Fatalf("unable to retrieve next ten of the user's events: %v", err)
 	}
 
-	fmt.Println("Upcoming events:")
+	if os.Args[1] == "clockin" || os.Args[1] == "ci" {
+		clockIn()
+	} else if os.Args[1] == "clockout" || os.Args[1] == "co" {
+		clockOut()
+	}
+
+	fmt.Println("\n\n\nUpcoming events:")
 	if len(events.Items) == 0 {
 		fmt.Println("No upcoming events found")
 	} else {
