@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -14,12 +15,6 @@ import (
 	"google.golang.org/api/calendar/v3"
 	"google.golang.org/api/option"
 )
-
-type gcalEvent struct {
-	start   calendar.EventDateTime
-	end     calendar.EventDateTime
-	summary string
-}
 
 // Retrieve a token, save the token, then return the generated client
 func getClient(config *oauth2.Config) *http.Client {
@@ -79,27 +74,89 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
+func findEventTempFile(pattern string) (string, error) {
+	// read list of files in a directory
+	files, err := os.ReadDir(".tmp")
+	if err != nil {
+		log.Fatalf("Unable to read .tmp directory: %v", err)
+	}
+	// compile regexp
+	patternRegexp := regexp.MustCompile(pattern)
+	// loop through files, match pattern
+	for _, file := range files {
+		if patternRegexp.MatchString(file.Name()) {
+			//   return file name
+			return ".tmp/" + file.Name(), nil
+		}
+	}
+	// return empty string, error
+	return "", fmt.Errorf("no temp file found matching pattern: %v", pattern)
+}
+
 func clockIn() {
 	// events resource: https://developers.google.com/calendar/api/v3/reference/events#resource
 	fmt.Print("Clocking in\n")
 
-	// create a temp file
+	// create a temp file for clocking in
 	eventStartDetails, err := os.CreateTemp("./.tmp", "newEventStartDetails-*")
 	if err != nil {
 		fmt.Printf("File not created: %v", err)
 	}
+	defer eventStartDetails.Close()
+
 	// write to temp file: start details needed for api call
-	t := time.Now()
-	bw, err := eventStartDetails.WriteString(t.Format(time.RFC3339))
+	bw, err := eventStartDetails.WriteString(time.Now().Format(time.RFC3339))
 	if err != nil {
 		log.Fatalf("Unable to write time to temp file: %v", err)
 	}
 	fmt.Printf("%v bytes written to temp file", bw)
 }
 
-func clockOut() {
+func clockOut(srv *calendar.Service) {
 	fmt.Print("Clocking out\n")
+
+	// create instance of calendar.Event struct
+	workEvent := &calendar.Event{
+		Start:   &calendar.EventDateTime{},
+		End:     &calendar.EventDateTime{},
+		Summary: "",
+	}
+
+	// read from temp file, store in gcalEvent.start
+	clockInFile, err := findEventTempFile("newEventStartDetails-.*")
+	if err != nil {
+		log.Fatalf("Failed to find temp file with start time: %v", err)
+	}
+
+	byteSliceFromTempFile, err := os.ReadFile(clockInFile)
+	if err != nil {
+		log.Fatalf("Failed to read temp file with start time: %v", err)
+	}
+	fmt.Printf("bytes from file: %v", string(byteSliceFromTempFile))
+	workEvent.Start.DateTime = string(byteSliceFromTempFile)
+
+	// store time.Now() in gcalEvent.end
+	workEvent.End.DateTime = time.Now().Format(time.RFC3339)
+
+	// assign default value to summary unless flag is specified
+	// TODO:
+	// 		summary comes from flags
+	workEvent.Summary = "Default Summary"
+
+	fmt.Printf("\nworkEvent start: %v", workEvent.Start.DateTime)
+	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
+	fmt.Printf("\nworkEvent summary: %v", workEvent.Summary)
+
 	// http request needs to have calendarId parameter
+	// primary for default currently
+	// calendarId := "primary"
+	// newWorkEvent, err := srv.Events.Insert(calendarId, workEvent).Do()
+	// if err != nil {
+	// 	log.Fatalf("\nFailed to create an event on Google Calendar: %v", err)
+	// }
+	// fmt.Printf("new work event:\n%v", newWorkEvent)
+
+	os.Remove(clockInFile)
 }
 
 func main() {
@@ -128,7 +185,7 @@ func main() {
 	}
 
 	// if modifying these scopes, delete your previously saved token.json
-	config, err := google.ConfigFromJSON(b, calendar.CalendarReadonlyScope)
+	config, err := google.ConfigFromJSON(b, calendar.CalendarEventsScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client file to config: %v", err)
 	}
@@ -139,50 +196,11 @@ func main() {
 		log.Fatalf("Unable to retrieve Calendar client: %v", err)
 	}
 
-	t := time.Now().Format(time.RFC3339)
-	events, err := srv.Events.List("primary").ShowDeleted(false).
-		SingleEvents(true).TimeMin(t).MaxResults(10).OrderBy("startTime").
-		Do()
-	// if error, replace the token.json file, getTokenFromWeb() will be called
-	if err != nil {
-		log.Fatalf("unable to retrieve next ten of the user's events: %v", err)
-	}
-
+	// check command
 	if os.Args[1] == "clockin" || os.Args[1] == "ci" {
 		clockIn()
 	} else if os.Args[1] == "clockout" || os.Args[1] == "co" {
-		clockOut()
-	}
-
-	fmt.Println("\n\n\nUpcoming events:")
-	if len(events.Items) == 0 {
-		fmt.Println("No upcoming events found")
-	} else {
-		for _, item := range events.Items {
-			var date string
-			startTime := item.Start.DateTime
-			endTime := item.End.DateTime
-			if startTime == "" || endTime == "" {
-				date = item.Start.Date
-				fmt.Printf("%v { Created by: %v on %v. Starts on %v }\n",
-					item.Summary, item.Creator.Email, item.Created, date)
-			} else {
-				startTimeParsed, err := time.Parse(time.RFC3339, startTime)
-				if err != nil {
-					fmt.Printf("Error parsing start time: %v\n", err)
-					continue
-				}
-				endTimeParsed, err := time.Parse(time.RFC3339, endTime)
-				if err != nil {
-					fmt.Printf("Error parsing end time: %v\n", err)
-					continue
-				}
-				fmt.Printf("%v { Created by: %v on %v. Starts at %v, ends at %v }\n",
-					item.Summary, item.Creator.Email, item.Created,
-					startTimeParsed.Format("Mon Jan 2 15:04:05 MST 2006"),
-					endTimeParsed.Format("15:04:05 MST 2006"))
-			}
-		}
+		clockOut(srv)
 	}
 
 }
