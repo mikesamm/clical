@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -95,14 +96,17 @@ func findEventTempFile(pattern string) (string, error) {
 
 func clockIn() {
 	// events resource: https://developers.google.com/calendar/api/v3/reference/events#resource
+func clockIn(eventSummary string) {
 	fmt.Print("Clocking in\n")
 
 	// create a temp file for clocking in
 	eventStartDetails, err := os.CreateTemp("./.tmp", "newEventStartDetails-*")
+	eventSummaryFile, err := os.CreateTemp("./.tmp", "newEventSummary-*")
 	if err != nil {
 		fmt.Printf("File not created: %v", err)
 	}
 	defer eventStartDetails.Close()
+	defer eventSummaryFile.Close()
 
 	// write to temp file: start details needed for api call
 	bw, err := eventStartDetails.WriteString(time.Now().Format(time.RFC3339))
@@ -110,6 +114,11 @@ func clockIn() {
 		log.Fatalf("Unable to write time to temp file: %v", err)
 	}
 	fmt.Printf("%v bytes written to temp file", bw)
+	_, err = eventSummaryFile.WriteString(eventSummary)
+	if err != nil {
+		log.Fatalf("Unable to write summary to temp file: %v", err)
+	}
+
 }
 
 func clockOut(srv *calendar.Service) {
@@ -142,7 +151,17 @@ func clockOut(srv *calendar.Service) {
 	// TODO:
 	// 		summary comes from flags
 	workEvent.Summary = "Default Summary"
+	// summary comes from file
+	eventSummaryFile, err := findEventTempFile("newEventSummary-.*")
+	if err != nil {
+		log.Fatalf("Failed to find temp file with summary: %v", err)
+	}
 
+	bytesFromSummaryFile, err := os.ReadFile(eventSummaryFile)
+	if err != nil {
+		log.Fatalf("Failed to read temp file with summary: %v", err)
+	}
+	workEvent.Summary = string(bytesFromSummaryFile)
 	fmt.Printf("\nworkEvent start: %v", workEvent.Start.DateTime)
 	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
 	fmt.Printf("\nworkEvent summary: %v", workEvent.Summary)
@@ -157,6 +176,7 @@ func clockOut(srv *calendar.Service) {
 	// fmt.Printf("new work event:\n%v", newWorkEvent)
 
 	os.Remove(clockInFile)
+	os.Remove(eventSummaryFile)
 }
 
 func main() {
@@ -170,6 +190,8 @@ func main() {
 			acceptedCommand = true
 		}
 	}
+	eventSummary := flag.String("s", "default s value", "Summary (title) of event")
+	flag.Parse()
 
 	// check for required arguments
 	if len(os.Args) <= 1 {
@@ -184,7 +206,6 @@ func main() {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
 
-	// if modifying these scopes, delete your previously saved token.json
 	config, err := google.ConfigFromJSON(b, calendar.CalendarEventsScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client file to config: %v", err)
@@ -197,10 +218,12 @@ func main() {
 	}
 
 	// check command
-	if os.Args[1] == "clockin" || os.Args[1] == "ci" {
-		clockIn()
-	} else if os.Args[1] == "clockout" || os.Args[1] == "co" {
+	switch os.Args[len(os.Args)-1] {
+	case "clockin", "ci":
+		clockIn(*eventSummary)
+	case "clockout", "co":
 		clockOut(srv)
+	default:
+		log.Fatal("\n\nInvalid command. Accepted commands are: clockin, ci, clockout, co")
 	}
-
 }
