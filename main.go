@@ -94,26 +94,27 @@ func findEventTempFile(pattern string) (string, error) {
 	return "", fmt.Errorf("no temp file found matching pattern: %v", pattern)
 }
 
-func clockIn() {
-	// events resource: https://developers.google.com/calendar/api/v3/reference/events#resource
 func clockIn(eventSummary string) {
 	fmt.Print("Clocking in\n")
 
 	// create a temp file for clocking in
-	eventStartDetails, err := os.CreateTemp("./.tmp", "newEventStartDetails-*")
+	eventStartTime, err := os.CreateTemp("./.tmp", "newEventStartTime-*")
+	if err != nil {
+		fmt.Printf("File not created: %v", err)
+	}
 	eventSummaryFile, err := os.CreateTemp("./.tmp", "newEventSummary-*")
 	if err != nil {
 		fmt.Printf("File not created: %v", err)
 	}
-	defer eventStartDetails.Close()
+	defer eventStartTime.Close()
 	defer eventSummaryFile.Close()
 
-	// write to temp file: start details needed for api call
-	bw, err := eventStartDetails.WriteString(time.Now().Format(time.RFC3339))
+	// write time to temp file
+	_, err = eventStartTime.WriteString(time.Now().Format(time.RFC3339))
 	if err != nil {
 		log.Fatalf("Unable to write time to temp file: %v", err)
 	}
-	fmt.Printf("%v bytes written to temp file", bw)
+
 	_, err = eventSummaryFile.WriteString(eventSummary)
 	if err != nil {
 		log.Fatalf("Unable to write summary to temp file: %v", err)
@@ -131,26 +132,22 @@ func clockOut(srv *calendar.Service) {
 		Summary: "",
 	}
 
-	// read from temp file, store in gcalEvent.start
-	clockInFile, err := findEventTempFile("newEventStartDetails-.*")
+	// clock in time comes from file
+	eventStartTimeFile, err := findEventTempFile("newEventStartTime-.*")
 	if err != nil {
 		log.Fatalf("Failed to find temp file with start time: %v", err)
 	}
 
-	byteSliceFromTempFile, err := os.ReadFile(clockInFile)
+	bytesFromTimeFile, err := os.ReadFile(eventStartTimeFile)
 	if err != nil {
 		log.Fatalf("Failed to read temp file with start time: %v", err)
 	}
-	fmt.Printf("bytes from file: %v", string(byteSliceFromTempFile))
-	workEvent.Start.DateTime = string(byteSliceFromTempFile)
 
-	// store time.Now() in gcalEvent.end
+	workEvent.Start.DateTime = string(bytesFromTimeFile)
+
+	// clock out time is now
 	workEvent.End.DateTime = time.Now().Format(time.RFC3339)
 
-	// assign default value to summary unless flag is specified
-	// TODO:
-	// 		summary comes from flags
-	workEvent.Summary = "Default Summary"
 	// summary comes from file
 	eventSummaryFile, err := findEventTempFile("newEventSummary-.*")
 	if err != nil {
@@ -162,6 +159,7 @@ func clockOut(srv *calendar.Service) {
 		log.Fatalf("Failed to read temp file with summary: %v", err)
 	}
 	workEvent.Summary = string(bytesFromSummaryFile)
+
 	fmt.Printf("\nworkEvent start: %v", workEvent.Start.DateTime)
 	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
 	fmt.Printf("\nworkEvent summary: %v", workEvent.Summary)
@@ -175,30 +173,27 @@ func clockOut(srv *calendar.Service) {
 	// }
 	// fmt.Printf("new work event:\n%v", newWorkEvent)
 
-	os.Remove(clockInFile)
+	// create full event in gcal
+	newWorkEvent, err := srv.Events.Insert(calId, workEvent).Do()
+	if err != nil {
+		log.Fatalf("\nFailed to create an event on Google Calendar: %v", err)
+	}
+	fmt.Printf("new work event:\n%v", newWorkEvent)
+
+	os.Remove(eventStartTimeFile)
 	os.Remove(eventSummaryFile)
 }
 
 func main() {
 	ctx := context.Background()
-	acceptedCommand := false
-	// check for accepted commands
-	for _, arg := range os.Args {
-		if arg == "clockin" || arg == "ci" {
-			acceptedCommand = true
-		} else if arg == "clockout" || arg == "co" {
-			acceptedCommand = true
-		}
-	}
+
 	eventSummary := flag.String("s", "default s value", "Summary (title) of event")
 	flag.Parse()
 
 	// check for required arguments
-	if len(os.Args) <= 1 {
+	if len(os.Args) < 2 {
 		log.Fatal("\n\nUsage: clical [command]\n\nCommands:\n\tclockin, ci - clock in to work\n" +
 			"\tclockout, co - clock out of work\n")
-	} else if !acceptedCommand {
-		log.Fatal("\n\nInvalid command. Accepted commands are: clockin, ci, clockout, co")
 	}
 
 	b, err := os.ReadFile(".tmp/credentials.json")
