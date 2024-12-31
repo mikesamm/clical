@@ -164,14 +164,11 @@ func clockOut(srv *calendar.Service) {
 	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
 	fmt.Printf("\nworkEvent summary: %v", workEvent.Summary)
 
-	// http request needs to have calendarId parameter
-	// primary for default currently
-	// calendarId := "primary"
-	// newWorkEvent, err := srv.Events.Insert(calendarId, workEvent).Do()
-	// if err != nil {
-	// 	log.Fatalf("\nFailed to create an event on Google Calendar: %v", err)
-	// }
-	// fmt.Printf("new work event:\n%v", newWorkEvent)
+	calIdRaw, err := os.ReadFile(".tmp/calendarId")
+	if err != nil {
+		log.Fatalf("Failed to read calendarId file: %v", err)
+	}
+	calId := string(calIdRaw)
 
 	// create full event in gcal
 	newWorkEvent, err := srv.Events.Insert(calId, workEvent).Do()
