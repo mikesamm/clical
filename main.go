@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/savioxavier/termlink"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/calendar/v3"
@@ -124,7 +125,6 @@ func clockIn(eventSummary string) {
 }
 
 func clockOut(srv *calendar.Service) {
-	fmt.Print("Clocking out\n")
 
 	// create instance of calendar.Event struct
 	workEvent := &calendar.Event{
@@ -147,7 +147,8 @@ func clockOut(srv *calendar.Service) {
 	workEvent.Start.DateTime = string(bytesFromTimeFile)
 
 	// clock out time is now
-	workEvent.End.DateTime = time.Now().Format(time.RFC3339)
+	clockOutTime := time.Now()
+	workEvent.End.DateTime = clockOutTime.Format(time.RFC3339)
 
 	// summary comes from file
 	eventSummaryFile, err := findEventTempFile("newEventSummary-.*")
@@ -161,10 +162,6 @@ func clockOut(srv *calendar.Service) {
 	}
 	workEvent.Summary = string(bytesFromSummaryFile)
 
-	fmt.Printf("\nworkEvent start: %v", workEvent.Start.DateTime)
-	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
-	fmt.Printf("\nworkEvent summary: %v\n", workEvent.Summary)
-
 	calIdRaw, err := os.ReadFile(".tmp/calendarId.txt")
 	if err != nil {
 		log.Fatalf("Failed to read calendarId file: %v", err)
@@ -176,7 +173,8 @@ func clockOut(srv *calendar.Service) {
 	if err != nil {
 		log.Fatalf("\nFailed to create an event on Google Calendar: %v", err)
 	}
-	fmt.Printf("new work event:\n%v\n", newWorkEvent)
+	fmt.Printf("Clocked out at: %v\n", clockOutTime.Format(time.TimeOnly))
+	fmt.Printf("See the new %s on your Google Calendar.\n", termlink.Link("work block", newWorkEvent.HtmlLink))
 
 	os.Remove(eventStartTimeFile)
 	os.Remove(eventSummaryFile)

@@ -3,6 +3,7 @@ module clical
 go 1.23.4
 
 require (
+	github.com/savioxavier/termlink v1.4.1
 	golang.org/x/oauth2 v0.24.0
 	google.golang.org/api v0.213.0
 )
