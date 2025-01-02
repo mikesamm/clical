@@ -95,7 +95,6 @@ func findEventTempFile(pattern string) (string, error) {
 }
 
 func clockIn(eventSummary string) {
-	fmt.Print("Clocking in\n")
 
 	// create a temp file for clocking in
 	eventStartTime, err := os.CreateTemp("./.tmp", "newEventStartTime-*")
@@ -110,7 +109,8 @@ func clockIn(eventSummary string) {
 	defer eventSummaryFile.Close()
 
 	// write time to temp file
-	_, err = eventStartTime.WriteString(time.Now().Format(time.RFC3339))
+	clockInTime := time.Now()
+	_, err = eventStartTime.WriteString(clockInTime.Format(time.RFC3339))
 	if err != nil {
 		log.Fatalf("Unable to write time to temp file: %v", err)
 	}
@@ -120,6 +120,7 @@ func clockIn(eventSummary string) {
 		log.Fatalf("Unable to write summary to temp file: %v", err)
 	}
 
+	fmt.Printf("Clocked in at: %v.\n", clockInTime.Format(time.TimeOnly))
 }
 
 func clockOut(srv *calendar.Service) {
@@ -164,7 +165,7 @@ func clockOut(srv *calendar.Service) {
 	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
 	fmt.Printf("\nworkEvent summary: %v", workEvent.Summary)
 
-	calIdRaw, err := os.ReadFile(".tmp/calendarId")
+	calIdRaw, err := os.ReadFile(".tmp/calendarId.txt")
 	if err != nil {
 		log.Fatalf("Failed to read calendarId file: %v", err)
 	}
@@ -184,7 +185,7 @@ func clockOut(srv *calendar.Service) {
 func main() {
 	ctx := context.Background()
 
-	eventSummary := flag.String("s", "default s value", "Summary (title) of event")
+	eventSummary := flag.String("s", "Work Block", "Summary (title) of event on Google Calendar.")
 	flag.Parse()
 
 	// check for required arguments
