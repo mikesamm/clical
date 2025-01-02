@@ -97,11 +97,11 @@ func findEventTempFile(pattern string) (string, error) {
 func clockIn(eventSummary string) {
 
 	// create a temp file for clocking in
-	eventStartTime, err := os.CreateTemp("./.tmp", "newEventStartTime-*")
+	eventStartTime, err := os.CreateTemp("./.tmp", "newEventStartTime-*.txt")
 	if err != nil {
 		fmt.Printf("File not created: %v", err)
 	}
-	eventSummaryFile, err := os.CreateTemp("./.tmp", "newEventSummary-*")
+	eventSummaryFile, err := os.CreateTemp("./.tmp", "newEventSummary-*.txt")
 	if err != nil {
 		fmt.Printf("File not created: %v", err)
 	}
@@ -163,7 +163,7 @@ func clockOut(srv *calendar.Service) {
 
 	fmt.Printf("\nworkEvent start: %v", workEvent.Start.DateTime)
 	fmt.Printf("\nworkEvent end: %v", workEvent.End.DateTime)
-	fmt.Printf("\nworkEvent summary: %v", workEvent.Summary)
+	fmt.Printf("\nworkEvent summary: %v\n", workEvent.Summary)
 
 	calIdRaw, err := os.ReadFile(".tmp/calendarId.txt")
 	if err != nil {
@@ -176,7 +176,7 @@ func clockOut(srv *calendar.Service) {
 	if err != nil {
 		log.Fatalf("\nFailed to create an event on Google Calendar: %v", err)
 	}
-	fmt.Printf("new work event:\n%v", newWorkEvent)
+	fmt.Printf("new work event:\n%v\n", newWorkEvent)
 
 	os.Remove(eventStartTimeFile)
 	os.Remove(eventSummaryFile)
