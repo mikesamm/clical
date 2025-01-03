@@ -9,7 +9,7 @@ Removed sections:
 
 <div align="center">
 
-  <img src="assets/logo.png" alt="logo" width="200" height="auto" />
+  <h1>> 🗓️</h1>
   <h1>clical</h1>
   
   <p>
@@ -72,99 +72,55 @@ Removed sections:
 <!-- - [Acknowledgements](#gem-acknowledgements) -->
 
 <!-- About the Project -->
-## :star2: About the Project
+## About the Project
 
 <!-- <div align="center"> 
   <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
 </div> -->
 
-clical is a Go application that facilitates tracking your time worked. You can clock in, clock out and your hours will be reflected as events in your Google Calendar.
+clical is a command line application that facilitates tracking your hours worked with your Google Calendar. When you clock in then clock out, an event is created, yielding a visual representation of your hours worked.
 
 <!-- TechStack -->
-<!-- ### :space_invader: Tech Stack
+### Built With
 
-<details>
-  <summary>Client</summary>
-  <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://nextjs.org/">Next.js</a></li>
-    <li><a href="https://reactjs.org/">React.js</a></li>
-    <li><a href="https://tailwindcss.com/">TailwindCSS</a></li>
-  </ul>
-</details>
+[![Go][https://img.shields.io/badge/go-000000?style=for-the-badge&logo=go&logoColor=%2300ADD8
+]]
+<!-- GETTING STARTED -->
+## Getting Started
 
-<details>
-  <summary>Server</summary>
-  <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://expressjs.com/">Express.js</a></li>
-    <li><a href="https://go.dev/">Golang</a></li>
-    <li><a href="https://nestjs.com/">Nest.js</a></li>
-    <li><a href="https://socket.io/">SocketIO</a></li>
-    <li><a href="https://www.prisma.io/">Prisma</a></li>    
-    <li><a href="https://www.apollographql.com/">Apollo</a></li>
-    <li><a href="https://graphql.org/">GraphQL</a></li>
-  </ul>
-</details>
+### Requirements
 
-<details>
-<summary>Database</summary>
-  <ul>
-    <li><a href="https://www.mysql.com/">MySQL</a></li>
-    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
-    <li><a href="https://redis.io/">Redis</a></li>
-    <li><a href="https://neo4j.com/">Neo4j</a></li>
-    <li><a href="https://www.mongodb.com/">MongoDB</a></li>
-  </ul>
-</details>
+You will need to [install Go](https://go.dev/doc/install) if you don't already have it.
 
-<details>
-<summary>DevOps</summary>
-  <ul>
-    <li><a href="https://www.docker.com/">Docker</a></li>
-    <li><a href="https://www.jenkins.io/">Jenkins</a></li>
-    <li><a href="https://circleci.com/">CircleCLI</a></li>
-  </ul>
-</details> -->
+You will need a Google account and need to make a project.
 
-<!-- Features -->
-<!-- ### :dart: Features
+### Installation
+#### Install from source
+1. Get a free API Key at [https://example.com](https://example.com)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/github_username/repo_name.git
+   ```
+3. Install NPM packages
+   ```sh
+   npm install
+   ```
+4. Enter your API in `config.js`
+   ```js
+   const API_KEY = 'ENTER YOUR API';
+   ```
+5. Change git remote url to avoid accidental pushes to base project
+   ```sh
+   git remote set-url origin github_username/repo_name
+   git remote -v # confirm the changes
+   ```
 
-- Feature 1
-- Feature 2
-- Feature 3 -->
+<!-- USAGE EXAMPLES -->
+## Usage
 
-<!-- Color Reference -->
-<!-- ### :art: Color Reference
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE | -->
-
-
-<!-- Env Variables -->
-<!-- ### :key: Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY` -->
-
-<!-- Getting Started -->
-<!-- ## 	:toolbox: Getting Started -->
-
-<!-- Prerequisites -->
-<!-- ### :bangbang: Prerequisites
-
-This project uses Yarn as package manager
-
-```bash
- npm install --global yarn
-``` -->
+_For more examples, please refer to the [Documentation](https://example.com)_
 
 <!-- Installation -->
 <!-- ### :gear: Installation
@@ -219,50 +175,21 @@ function App() {
 }
 ``` -->
 
-<!-- Roadmap -->
-<!-- ## :compass: Roadmap
-
-* [x] Todo 1
-* [ ] Todo 2 -->
-
-<!-- Contributing -->
-<!-- ## :wave: Contributing
-
-<a href="https://github.com/Louis3797/awesome-readme-template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Louis3797/awesome-readme-template" />
-</a>
-
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started. -->
-
-
-<!-- Code of Conduct -->
-<!-- ### :scroll: Code of Conduct
-
-Please read the [Code of Conduct](https://github.com/Louis3797/awesome-readme-template/blob/master/CODE_OF_CONDUCT.md) -->
-
-
 <!-- License -->
-## :warning: License
+## License
 
 Distributed under the MIT License. See LICENSE.txt for more information.
 
-
 <!-- Contact -->
-## :handshake: Contact
+## Contact
 
 Mike Sammartino - mike@mikesammartino.com
 
 Project Link: [https://github.com/mikesamm/clical](https://github.com/mikesamm/clical)
 
 <!-- Acknowledgments -->
-<!-- ## :gem: Acknowledgements
+## Acknowledgements
 
 Use this section to mention useful resources and libraries that you have used in your projects.
 
- - [Shields.io](https://shields.io/)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md#travel--places)
- - [Readme Template](https://github.com/othneildrew/Best-README-Template) -->
+ - [Readme Template](https://github.com/othneildrew/Best-README-Template)
