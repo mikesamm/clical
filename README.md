@@ -1,268 +1,141 @@
-<!--
-This README is a slimmed down version of the original one.
-Removed sections:
-- Screenshots
-- Running Test
-- Deployment
-- FAQ
--->
-
 <div align="center">
-
-  <img src="assets/logo.png" alt="logo" width="200" height="auto" />
-  <h1>clical</h1>
-  
-  <p>
-    
-  </p>
-
-  
-<!-- Badges -->
-<!-- <p>
-  <a href="https://github.com/Louis3797/awesome-readme-template/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/Louis3797/awesome-readme-template" alt="contributors" />
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/github/last-commit/Louis3797/awesome-readme-template" alt="last update" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/network/members">
-    <img src="https://img.shields.io/github/forks/Louis3797/awesome-readme-template" alt="forks" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/stargazers">
-    <img src="https://img.shields.io/github/stars/Louis3797/awesome-readme-template" alt="stars" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/issues/">
-    <img src="https://img.shields.io/github/issues/Louis3797/awesome-readme-template" alt="open issues" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/Louis3797/awesome-readme-template.svg" alt="license" />
-  </a>
-</p> -->
-   
-<!-- <h4>
-    <a href="https://github.com/Louis3797/awesome-readme-template/">View Demo</a>
-  <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template">Documentation</a>
-  <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template/issues/">Report Bug</a>
-  <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template/issues/">Request Feature</a>
-  </h4> -->
+  <h1>>🗓️ clical</h1>
 </div>
 
 <br />
 
-<!-- Table of Contents -->
+## About the Project
 
-<!-- - [About the Project](#star2-about-the-project) -->
-  <!-- * [Tech Stack](#space_invader-tech-stack)
-  * [Features](#dart-features)
-  * [Color Reference](#art-color-reference)
-  * [Environment Variables](#key-environment-variables) -->
-<!-- - [Getting Started](#toolbox-getting-started)
-  * [Prerequisites](#bangbang-prerequisites)
-  * [Installation](#gear-installation)
-  * [Run Locally](#running-run-locally)
-- [Usage](#eyes-usage)
-- [Roadmap](#compass-roadmap)
-- [Contributing](#wave-contributing)
-  * [Code of Conduct](#scroll-code-of-conduct) -->
-<!-- - [License](#warning-license) -->
-<!-- - [Contact](#handshake-contact) -->
-<!-- - [Acknowledgements](#gem-acknowledgements) -->
+**clical** is a command line application, written in Go, that facilitates tracking your hours worked in Google Calendar. When you clock in then clock out, an event is created, yielding a visual representation of your hours worked. 😎
 
-<!-- About the Project -->
-## :star2: About the Project
+<!-- GETTING STARTED -->
+## Getting Started
 
-<!-- <div align="center"> 
-  <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
-</div> -->
-
-clical is a Go application that facilitates tracking your time worked. You can clock in, clock out and your hours will be reflected as events in your Google Calendar.
-
-<!-- TechStack -->
-<!-- ### :space_invader: Tech Stack
-
-<details>
-  <summary>Client</summary>
-  <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://nextjs.org/">Next.js</a></li>
-    <li><a href="https://reactjs.org/">React.js</a></li>
-    <li><a href="https://tailwindcss.com/">TailwindCSS</a></li>
-  </ul>
-</details>
-
-<details>
-  <summary>Server</summary>
-  <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://expressjs.com/">Express.js</a></li>
-    <li><a href="https://go.dev/">Golang</a></li>
-    <li><a href="https://nestjs.com/">Nest.js</a></li>
-    <li><a href="https://socket.io/">SocketIO</a></li>
-    <li><a href="https://www.prisma.io/">Prisma</a></li>    
-    <li><a href="https://www.apollographql.com/">Apollo</a></li>
-    <li><a href="https://graphql.org/">GraphQL</a></li>
-  </ul>
-</details>
-
-<details>
-<summary>Database</summary>
-  <ul>
-    <li><a href="https://www.mysql.com/">MySQL</a></li>
-    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
-    <li><a href="https://redis.io/">Redis</a></li>
-    <li><a href="https://neo4j.com/">Neo4j</a></li>
-    <li><a href="https://www.mongodb.com/">MongoDB</a></li>
-  </ul>
-</details>
-
-<details>
-<summary>DevOps</summary>
-  <ul>
-    <li><a href="https://www.docker.com/">Docker</a></li>
-    <li><a href="https://www.jenkins.io/">Jenkins</a></li>
-    <li><a href="https://circleci.com/">CircleCLI</a></li>
-  </ul>
-</details> -->
-
-<!-- Features -->
-<!-- ### :dart: Features
-
-- Feature 1
-- Feature 2
-- Feature 3 -->
-
-<!-- Color Reference -->
-<!-- ### :art: Color Reference
-
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE | -->
-
-
-<!-- Env Variables -->
-<!-- ### :key: Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY` -->
-
-<!-- Getting Started -->
-<!-- ## 	:toolbox: Getting Started -->
-
-<!-- Prerequisites -->
-<!-- ### :bangbang: Prerequisites
-
-This project uses Yarn as package manager
-
-```bash
- npm install --global yarn
-``` -->
+### Requirements
+1. A Google account.
+2. A Google Cloud project. I recommend [setting up your project](#authenticating-for-the-google-apis) first.
+3. Go installed on your machine, docs [here](https://go.dev/doc/install).
 
 <!-- Installation -->
-<!-- ### :gear: Installation
-
-Install my-project with npm
-
-```bash
-  yarn install my-project
-  cd my-project
-``` -->
-
+### Installation
 
 <!-- Run Locally -->
-<!-- ### :running: Run Locally
+#### Build from source, run locally
 
-Clone the project
+0. Clone the project
 
 ```bash
-  git clone https://github.com/Louis3797/awesome-readme-template.git
+  git clone https://github.com/mikesamm/clical.git
 ```
 
-Go to the project directory
+1. Go to the project's root directory
 
 ```bash
-  cd my-project
+  cd clical
+```
+2. [Set calendar ID](#find-and-set-your-google-calendar-id) to your desired calendar (or don't. **clical** will default to your 'primary' calendar).
+
+3. Add a `credentials.json` file to `/.tmp`. These credentials should be the `.json` file you downloaded from your [Google Cloud project](#part-2-creating-an-auth-client-and-token).
+
+4. Build **clical**
+```bash
+go build clical
 ```
 
-Install dependencies
+## Usage
 
-```bash
-  yarn install
+```
+./clical [OPTIONS] [COMMAND]
 ```
 
-Start the server
+1. Run `./clical ci` or `./clical clockin`.
+    1. On the first run, it will prompt you to follow an authentication link. Click through the OAuth consent process. This process is directly connected to your [Google Cloud project](#authenticating-for-the-google-apis).
+    2. Once you've continued as far as you can and it appears that the redirect failed, you're in the right place.
+    3. In the url, find the `code=` query parameter. Copy the entire value for that parameter up to and NOT including the next `&` (you'll likely see `&scope=` as the next parameter).
+    4. You should now have a very long string of characters. Paste that in your terminal at the `Enter authCode here:` prompt and press enter.
+    5. Your token should be saved to a file in the `/.tmp` directory, and you should see a successful clock in confirmation with the current time.
+2. When you're ready, run `./clical co` or `./clical clockin` and you will see a confirmation with a link to the event you just created.
 
-```bash
-  yarn start
-``` -->
+**currently clical can only run from its root directory*
 
+### Examples
 
-<!-- Usage -->
-<!-- ## :eyes: Usage
+```
+./clical ci                  // clock in with default event summary
+./clical -s "coffe shop" ci  // clock in with custom summary
+./clical co                  // clock out
+```
 
-Use this space to tell a little more about your project and how it can be used. Show additional screenshots, code samples, demos or link to other resources. -->
-
-<!-- 
-```javascript
-import Component from 'my-project'
-
-function App() {
-  return <Component />
-}
-``` -->
-
-<!-- Roadmap -->
-<!-- ## :compass: Roadmap
-
-* [x] Todo 1
-* [ ] Todo 2 -->
-
-<!-- Contributing -->
-<!-- ## :wave: Contributing
-
-<a href="https://github.com/Louis3797/awesome-readme-template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Louis3797/awesome-readme-template" />
-</a>
-
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started. -->
-
-
-<!-- Code of Conduct -->
-<!-- ### :scroll: Code of Conduct
-
-Please read the [Code of Conduct](https://github.com/Louis3797/awesome-readme-template/blob/master/CODE_OF_CONDUCT.md) -->
-
+### Options
+```
+-s        // create a custom event summary
+```
+**A summary in Google Calendar is the title (what you see on the actual calendar block).*
 
 <!-- License -->
-## :warning: License
+## License
 
 Distributed under the MIT License. See LICENSE.txt for more information.
 
 
 <!-- Contact -->
-## :handshake: Contact
+## Contact
 
 Mike Sammartino - mike@mikesammartino.com
 
 Project Link: [https://github.com/mikesamm/clical](https://github.com/mikesamm/clical)
 
-<!-- Acknowledgments -->
-<!-- ## :gem: Acknowledgements
+ ## Appendix
 
-Use this section to mention useful resources and libraries that you have used in your projects.
+ ### Find and Set your Google Calendar ID
 
- - [Shields.io](https://shields.io/)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md#travel--places)
- - [Readme Template](https://github.com/othneildrew/Best-README-Template) -->
+1. Open Google Calendar.
+2. Find the list of calendars on the bottom left.
+3. Hover over your desired calendar, click the three dots that appear, then click "Settings and sharing".
+4. Under "Integrate calendar" you'll see the calendar id. Copy the complete string and replace the placeholder text in `.tmp/calendar.txt.example`.
+5. Truncate `calendar.txt.example` to `calendar.txt`.
+6. **clical** will now create events in this calendar.
+
+### Authenticating for the Google APIs
+
+**clical** needs to be granted permission to integrate with Google APIs for your account before it can work properly.
+
+These initial setup steps can look a little intimidating, but they're completely safe and similar to the setup currently needed for most non-commercial projects that integrate with Google APIs (for example, [gmailctl] or [Home Assistant](https://www.home-assistant.io/integrations/google_assistant/)).
+
+[gmailctl]: https://github.com/mbrt/gmailctl
+
+#### Part 1: Setting up your Google "project"
+
+To generate an OAuth token, you first need a placeholder "project" in Google Cloud Console. Create a new project if you don't already have a generic one you can reuse.
+
+1. [Create a New Project](https://console.developers.google.com/projectcreate) within the Google
+   developer console
+  1. (You can skip to the next step if you already have a placeholder project you can use)
+  2. Pick any project name. Example: "Placeholder Project 12345"
+  3. Click the "Create" button.
+2. [Enable the Google Calendar API](https://console.developers.google.com/apis/api/calendar-json.googleapis.com/)
+  1. Click the "Enable" button.
+
+#### Part 2: Creating an auth client and token
+
+Once you have the project with Calendar API enabled, you need a way for **clical** to request permission to use it on a user's account.
+
+1. [Create OAuth2 consent screen](https://console.developers.google.com/apis/credentials/consent/edit;newAppInternalUser=false) for a "UI/Desktop Application".
+   1. Fill out required App information section
+      1. Specify App name. Example: "clical"
+      2. Specify User support email. Example: your@gmail.com
+   2. Fill out required Developer contact information
+      1. Specify Email addresses. Example: your@gmail.com
+   3. Click the "Save and continue" button.
+   4. Scopes:
+      1. add the `.../auth/calendar.events` scope.
+      2. click the "Save and continue" button.
+   5. Test users
+      1. Add your@gmail.com
+      2. Click the "Save and continue" button.
+2. [Create OAuth Client ID](https://console.developers.google.com/apis/credentials/oauthclient)
+   1. Specify Application type: Desktop app.
+   2. Click the "Create" button.
+3. Grab your newly created credentials. You'll see Client ID (in the form "xxxxxxxxxxxxxxx.apps.googleusercontent.com") and Client Secret either on the Credentials page or Clients page.
+4. Click the download button next to the Client Secret. You've downloaded the `.json` file containing your credentials.
+5. Download as `credentials.json` in the `clical/.tmp` directory or create a `credentials.json` file in `/.tmp` and copy the contents of the downloaded file.

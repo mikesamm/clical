@@ -126,7 +126,6 @@ func clockIn(eventSummary string) {
 
 func clockOut(srv *calendar.Service) {
 
-	// create instance of calendar.Event struct
 	workEvent := &calendar.Event{
 		Start:   &calendar.EventDateTime{},
 		End:     &calendar.EventDateTime{},
@@ -162,11 +161,14 @@ func clockOut(srv *calendar.Service) {
 	}
 	workEvent.Summary = string(bytesFromSummaryFile)
 
+	var calId string
 	calIdRaw, err := os.ReadFile(".tmp/calendarId.txt")
 	if err != nil {
-		log.Fatalf("Failed to read calendarId file: %v", err)
+		fmt.Println("No calendar ID provided. Event created on 'primary' calendar.")
+		calId = "primary"
+	} else {
+		calId = string(calIdRaw)
 	}
-	calId := string(calIdRaw)
 
 	// create full event in gcal
 	newWorkEvent, err := srv.Events.Insert(calId, workEvent).Do()
