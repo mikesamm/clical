@@ -71,11 +71,11 @@ go build clical
 -s        // create a custom event summary
 ```
 **A summary in Google Calendar is the title (what you see on the actual calendar block).*
-### Planned features
+## Planned features
 - `status` command to check whether if you're currently clocked in or not.
 - `total` command to see your total hours for a given time period (with options for day, week month, year, custom range).
 
-### Known Bugs
+## Known Bugs
 - [issue #1](https://github.com/mikesamm/clical/issues/1#issue-2769463062) - clocking in twice breaks clock out.
 
 <!-- License -->
