@@ -97,6 +97,21 @@ func findEventTempFile(pattern string) (string, error) {
 
 func clockIn(eventSummary string) {
 
+	// check if user is already clocked in
+	eventStartTimeFile, err := findEventTempFile("newEventStartTime-.*")
+	if err == nil {
+		bytesFromTimeFile, err := os.ReadFile(eventStartTimeFile)
+		if err != nil {
+			log.Fatalf("Failed to read original clock-in file with start time: %v", err)
+		}
+
+		lastClockInDayTime, err := time.Parse(time.RFC3339, string(bytesFromTimeFile))
+		if err != nil {
+			log.Fatalf("Failed to parse time from RFC3339 string to ANSIC format: %v", err)
+		}
+		log.Fatalf("Already clocked in. Last clocked in: %v", lastClockInDayTime.Format(time.ANSIC))
+	}
+
 	// create a temp file for clocking in
 	eventStartTime, err := os.CreateTemp("./.tmp", "newEventStartTime-*.txt")
 	if err != nil {
