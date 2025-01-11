@@ -56,8 +56,6 @@ go build clical
     5. Your token should be saved to a file in the `/.tmp` directory, and you should see a successful clock in confirmation with the current time.
 2. When you're ready, run `./clical co` or `./clical clockin` and you will see a confirmation with a link to the event you just created.
 
-**currently clical can only run from its root directory*
-
 ### Examples
 
 ```
@@ -70,10 +68,18 @@ go build clical
 ```
 -s        // create a custom event summary
 ```
+
+#### :warning: `clical` *can only be run in its root directory.*
+This is by design. For security, credentials and tokens are only stored on the user's local machine, in the `clical/.tmp` directory. I suggest creaing an alias in your shell config that navigates directly to your `/clical` directory from anywhere, like `alias timeclock='cd ~/Documents/apps/clical'`.
+
+#### Adding to your `PATH`
+Depending on your machine, you may need to add Go to your `PATH` during installation (see Go [install docs](https://go.dev/doc/install)).
+To add `clical` to your path, copy the binary file (built from step 4 above) to the `.../go/bin` directory in your path. You can now use the command `clical` instead of `./clical`.
 **A summary in Google Calendar is the title (what you see on the actual calendar block).*
 ## Planned features
 - `status` command to check whether if you're currently clocked in or not.
 - `total` command to see your total hours for a given time period (with options for day, week month, year, custom range).
+- `list` command to list events within a custom time range.
 
 ## Known Bugs
 - [issue #1](https://github.com/mikesamm/clical/issues/1#issue-2769463062) - clocking in twice breaks clock out.
