@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/savioxavier/termlink"
@@ -158,7 +159,8 @@ func clockOut(srv *calendar.Service) {
 		log.Fatalf("Failed to read temp file with start time: %v", err)
 	}
 
-	workEvent.Start.DateTime = string(bytesFromTimeFile)
+	clockInTime := string(bytesFromTimeFile)
+	workEvent.Start.DateTime = clockInTime
 
 	// clock out time is now
 	clockOutTime := time.Now()
@@ -187,8 +189,18 @@ func clockOut(srv *calendar.Service) {
 
 	// create full event in gcal
 	newWorkEvent, err := srv.Events.Insert(calId, workEvent).Do()
+	if strings.Contains(err.Error(), "Token has been expired or revoked") {
+		fmt.Printf("\nWARNING: Failed to create an event on Google Calendar:"+
+			"\n\t*Your Google OAuth token has expired.*"+
+			"\n\tPlease clock-in again to restart the authentication token process. "+
+			"\n\tYour last clock-in time was erased, but here it is for your records: %v\n", clockInTime)
+		os.Remove(eventStartTimeFile)
+		os.Remove(eventSummaryFile)
+		os.Remove(".tmp/token.json")
+		os.Exit(2)
+	}
 	if err != nil {
-		log.Fatalf("\nFailed to create an event on Google Calendar: %v", err)
+		log.Fatalf("Failed to create an event on Google Calendar: %v", err)
 	}
 	fmt.Printf("Clocked out at: %v\n", clockOutTime.Format(time.TimeOnly))
 	fmt.Printf("See the new %s on your Google Calendar.\n", termlink.Link("work block", newWorkEvent.HtmlLink))
